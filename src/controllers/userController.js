@@ -26,9 +26,11 @@ exports.getUserById = async (req, res) => {
 
 // Tambah user baru
 exports.createUser = async (req, res) => {
-  const { name, email } = req.body;
+  const { fullname, username, password, email } = req.body;
+
   try {
-    await db.query("INSERT INTO users (name, email) VALUES (?, ?)", [name, email]);
+    await db.query("INSERT INTO users (fullname, username, password, email) VALUES (?, ?, ?, ?)", [fullname, username, password, email]);
+
     res.status(201).json({ message: "User berhasil ditambahkan" });
   } catch (error) {
     res.status(500).json({ message: "Gagal menambah user", error });
