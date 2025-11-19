@@ -1,3 +1,5 @@
+const bcrypt = require("bcrypt");
+
 const db = require("../config/db");
 
 // Ambil semua user
@@ -29,7 +31,8 @@ exports.createUser = async (req, res) => {
   const { fullname, username, password, email } = req.body;
 
   try {
-    await db.query("INSERT INTO users (fullname, username, password, email) VALUES (?, ?, ?, ?)", [fullname, username, password, email]);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await db.query("INSERT INTO users (fullname, username, password, email) VALUES (?, ?, ?, ?)", [fullname, username, hashedPassword, email]);
 
     res.status(201).json({ message: "User berhasil ditambahkan" });
   } catch (error) {
